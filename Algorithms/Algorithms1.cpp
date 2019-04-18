@@ -25,10 +25,10 @@ Algorithms1::Algorithms1()
 Algorithms1::~Algorithms1()
 {
 }
-void Algorithms1::writeToFile(string s) {
+void Algorithms1::writeToFile(string s,int* p,int iSize) {
 	ofstream oFile(s);
 	for (int i = 0; i < iSize; i++) {
-		oFile << pCount[i] << endl;
+		oFile << *p << endl;
 	}
 	oFile.close();
 }
@@ -108,5 +108,29 @@ void Algorithms1::GetPageCount(int m, std::string s) {
 	for (int i = 0; i < n; i++)
 		iReduce += pow(10,i);
 	pCount[0] -= iReduce;
-	writeToFile(s);
+	writeToFile(s,pCount,iSize);
+}
+//¼ÆËãCm
+int Algorithms1::Permutations(const int m, const int n) {
+	int iValue = 1;
+	for (int i = m; i <= n; ++i)
+		iValue *= i;
+	for (int i = 1; i <= m - n + 1; ++i)
+		iValue /= i;
+	return iValue;
+}
+
+int Algorithms1::getIndex(string s) {
+	const int pBase[] = {0,26,351,2951,17901,83681};
+	int iIndex = pBase[s.length()-1],iSize=s.length(),iBase=26;
+	for (int i = 0; i < iSize; ++i) {
+		if (i + 1 < iSize&&s[i] >= s[i + 1])
+			return 0;
+		int iPos = s[i] - 'a' +1;
+		for (int j = 1; j < iPos; ++j) {
+			iIndex += Permutations(26 - j, iSize - i - 1);
+		}		
+	}
+	++iIndex;
+	return iIndex;
 }

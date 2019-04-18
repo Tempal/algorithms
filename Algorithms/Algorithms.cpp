@@ -12,28 +12,35 @@ using namespace std;
 
 int main()
 {
-	string s = "D:\\workspace\\VS2017\\solutions\\ch1\\prog11\\test\\";
-	string s1 = "D:\\workspace\\VS2017\\solutions\\ch1\\prog11\\temp\\";
+	string s = "D:\\workspace\\VS2017\\solutions\\ch1\\prog12\\test\\";
+	string s1 = "D:\\workspace\\VS2017\\solutions\\ch1\\prog12\\temp\\";
 	Algorithms1 ag;
-	for (char i = 0; i < 10; ++i) {
-		string sOut = s1 +"countOut" + to_string(i);
-		string sIn = s + "count" + to_string(i) + "\.in" ;
+//	for (char i = 0; i < 10; ++i) {
+		string sOut = s1 +"countOut" ;
+		string sIn = s + "encode.in" ;
 		ifstream fInput(sIn);
 		int iValue = 0;
-		char s[100];
+		char pS[100];
+		fInput.getline(pS, 100);
+		ofstream oFile(sOut);
 		while (!fInput.eof()) {
-			fInput.getline(s,100);
-			iValue=atoi(s);
-			ag.GetPageCount(iValue,sOut);
+			string s1;
+			fInput.getline(pS,100);
+			iValue=atoi(pS);
+			s1 = pS;
+			//ag.GetPageCount(iValue,sOut);
 			//pageCount(iValue);
 			/*ofstream oFile(sOut);
 			for (int i = 0; i < iSize; i++) {
 				oFile << pCount[i] << endl;
 			}
 			oFile.close();*/
+			int iIndex=ag.getIndex(s1);
+			oFile << iIndex << endl;
 		}
+		oFile.close();
 		fInput.close();
-	}
+//	}
 
     std::cout << "Hello World!\n"; 
 }

@@ -3,12 +3,16 @@
 class Algorithms1
 {
 private:
+	//1-1
 	const int pBase[10] = { 0, 1, 20, 300, 4000, 50000, 600000, 7000000, 80000000, 900000000 };
 	const int iSize = 10;
-	long long int pCount[10];
+	int pCount[10];
 	int pValue[10];
 	void pageCountCore(int* pValue,int n);
-	void writeToFile(std::string s);
+	void writeToFile(std::string s, int* p, int iSize);
+	//1-2
+	const int iLength = 6;
+	char pChar[6];
 public:
 	Algorithms1();
 	//一本书的页码从白然数1开始顺序编码直到白然数，i。书的页码按照通常的习惯编排，
@@ -17,6 +21,9 @@ public:
 	//2，…，9。
 	//n为数字，s为输出
 	void GetPageCount(int m, std::string s);
+	int Permutations(const int m, const int n);
+	//升序排序字符串
+	int getIndex(std::string s);
 	~Algorithms1();
 };
 
