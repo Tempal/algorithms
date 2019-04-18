@@ -3,9 +3,38 @@
 
 #include "pch.h"
 #include <iostream>
+#include <fstream>
+#include <string>
+#include "Algorithms1.h"
+using namespace std;
+
+
 
 int main()
 {
+	string s = "D:\\workspace\\VS2017\\solutions\\ch1\\prog11\\test\\";
+	string s1 = "D:\\workspace\\VS2017\\solutions\\ch1\\prog11\\temp\\";
+	Algorithms1 ag;
+	for (char i = 0; i < 10; ++i) {
+		string sOut = s1 +"countOut" + to_string(i);
+		string sIn = s + "count" + to_string(i) + "\.in" ;
+		ifstream fInput(sIn);
+		int iValue = 0;
+		char s[100];
+		while (!fInput.eof()) {
+			fInput.getline(s,100);
+			iValue=atoi(s);
+			ag.GetPageCount(iValue,sOut);
+			//pageCount(iValue);
+			/*ofstream oFile(sOut);
+			for (int i = 0; i < iSize; i++) {
+				oFile << pCount[i] << endl;
+			}
+			oFile.close();*/
+		}
+		fInput.close();
+	}
+
     std::cout << "Hello World!\n"; 
 }
 
