@@ -110,12 +110,12 @@ void Algorithms1::GetPageCount(int m, std::string s) {
 	pCount[0] -= iReduce;
 	writeToFile(s,pCount,iSize);
 }
-//计算Cm
+//计算全排列
 int Algorithms1::Permutations(const int m, const int n) {
 	int iValue = 1;
-	for (int i = m; i <= n; ++i)
+	for (int i = m; i >= m-n+1; --i)
 		iValue *= i;
-	for (int i = 1; i <= m - n + 1; ++i)
+	for (int i = 1; i <= n; ++i)
 		iValue /= i;
 	return iValue;
 }
@@ -127,10 +127,15 @@ int Algorithms1::getIndex(string s) {
 		if (i + 1 < iSize&&s[i] >= s[i + 1])
 			return 0;
 		int iPos = s[i] - 'a' +1;
-		for (int j = 1; j < iPos; ++j) {
-			iIndex += Permutations(26 - j, iSize - i - 1);
+		int iFrom = 0;
+		if (i == 0)
+			iFrom = 1;
+		else
+			iFrom = s[i - 1] - 'a' + 2;//注意从前面的一个字符加1开始算起，到当前字符减一为止
+		for (int j = iFrom; j < iPos; ++j) {
+			iIndex += Permutations(26 - j, iSize - i - 1);//选择基数有从当前后面的的位数
 		}		
 	}
-	++iIndex;
+	++iIndex;//当前的字符
 	return iIndex;
 }

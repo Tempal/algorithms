@@ -22,7 +22,10 @@ public:
 	//n为数字，s为输出
 	void GetPageCount(int m, std::string s);
 	int Permutations(const int m, const int n);
-	//升序排序字符串
+	//升序排序字符串1-2
+	//在数据加密和数据压缩中常需要对特殊的字符串进行编码。给定的字母表 A 由 26 个小写英文字母组成 A={a,b,…,z}。
+	//该字母表产生的升序字符串是指字符串中字母按照从左到右出现的次序与字母在字母表中出现的次序相同，
+	//且每个字符最多出现 1 次。
 	int getIndex(std::string s);
 	~Algorithms1();
 };

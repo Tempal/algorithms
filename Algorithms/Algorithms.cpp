@@ -38,7 +38,8 @@ int main()
 			int iIndex=ag.getIndex(s1);
 			oFile << iIndex << endl;
 		}
-		oFile.close();
+		//ag.getIndex("ahou");
+		//oFile.close();
 		fInput.close();
 //	}
 
