@@ -12,22 +12,22 @@ using namespace std;
 
 int main()
 {
-	string s = "D:\\workspace\\VS2017\\solutions\\ch1\\prog12\\test\\";
-	string s1 = "D:\\workspace\\VS2017\\solutions\\ch1\\prog12\\temp\\";
+	string s = "D:\\workspace\\VS2017\\solutions\\ch1\\prog13\\test\\";
+	string s1 = "D:\\workspace\\VS2017\\solutions\\ch1\\prog13\\temp\\";
 	Algorithms1 ag;
-//	for (char i = 0; i < 10; ++i) {
-		string sOut = s1 +"countOut" ;
-		string sIn = s + "encode.in" ;
+	for (char i = 0; i < 11; ++i) {
+		string sOut = s1 +"countOut" +to_string(i);
+		string sIn = s + "divi"+to_string(i) +"\.in" ;
 		ifstream fInput(sIn);
 		int iValue = 0;
-		char pS[100];
-		fInput.getline(pS, 100);
+		//char pS[100];
+		//fInput.getline(pS, 100);
 		ofstream oFile(sOut);
-		while (!fInput.eof()) {
-			string s1;
-			fInput.getline(pS,100);
-			iValue=atoi(pS);
-			s1 = pS;
+		//while (!fInput.eof()) {
+			//string s1;
+			//fInput.getline(pS,100);
+			//iValue=atoi(pS);
+			//s1 = pS;
 			//ag.GetPageCount(iValue,sOut);
 			//pageCount(iValue);
 			/*ofstream oFile(sOut);
@@ -35,13 +35,18 @@ int main()
 				oFile << pCount[i] << endl;
 			}
 			oFile.close();*/
-			int iIndex=ag.getIndex(s1);
-			oFile << iIndex << endl;
-		}
+			//int iIndex=ag.getIndex(s1);
+			int iFrom, iTo;
+			fInput >> iFrom >> iTo;
+			//1000000 2000000
+			int iResult=ag.getMaxDiv(iFrom, iTo);
+			//int iResult = ag.getMaxDiv(121, 121);
+			oFile << iResult << endl;
+		//}
 		//ag.getIndex("ahou");
-		//oFile.close();
+		oFile.close();
 		fInput.close();
-//	}
+	}
 
     std::cout << "Hello World!\n"; 
 }
