@@ -49,6 +49,7 @@ public:
 	//	之间约数个数最多的数 x
 	int getMaxDiv(const int iFrom, const int iTo);
 	//void dfs(int point, int cnt1, long long now, long long num, int a, int b);
+
 	~Algorithms1();
 };
 
