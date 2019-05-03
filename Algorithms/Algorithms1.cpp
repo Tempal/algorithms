@@ -306,3 +306,155 @@ int Algorithms1::getMaxDiv(const int iFrom, const int iTo) {
 
 	return max;
 }
+
+//求出最大和最小的下标
+template<class T>
+int mini(int n, T*x) {
+	T temp = x[1];
+	int iMin = 1;
+	for (int i = 1; i <= n; ++i) {
+		if (temp > x[i]) {
+			temp = x[i];
+			iMin = i;
+		}
+	}
+	return iMin;
+}
+
+template<class T>
+int maxi(int n, T* x) {
+	T temp = x[1];
+	int iMax = 1;
+	for (int i = 1; i <= n; ++i) {
+		if (temp < x[i]) {
+			temp = x[i];
+			iMax = i;
+		}
+	}
+	return iMax;
+}
+
+double Algorithms1::maxgap(int n, double *x) {
+	double minx = x[mini(n, x)], maxx = x[maxi(n, x)];
+	//用n一2个等间距点分割区间[minx, maxx].
+	//产生n一1个桶，每个桶i中用high〔i]和low「i}
+	//分别存储分配给桶1的数中的最大数和最小数
+	int *count = new int[iMaxSize];
+	double *low = new double[iMaxSize], *high = new double[iMaxSize];
+	//桶初始化
+	for (int i = 1; i <= n - 1; i++) {
+		count[i] = 0;
+		low[i] = maxx;
+		high[i] = minx;
+	}
+	//将n个数置于n-1个桶里面
+	for (int i = 1; i <= n; i++) {
+		int bucket = int((n - 1)*(x[i] - minx) / (maxx - minx)) + 1;
+		count[bucket]++;
+		if (x[i] < low[bucket])low[bucket] = x[i];
+		if (x[i] > high[bucket])high[bucket] = x[i];
+	}
+	//此时，除了maxx和minx外的n一2个数被置于n一1个桶中
+	//由鸽舍原理即知，至少有一个桶是空的.
+	//这意味着最大间隙不会出现在同一桶中的两个数之间。
+	//对每一个桶做一次线性扫描即可找出最大间隙，
+	double tmp = 0, left = high[1];
+	for (int i = 2; i <= n - 1; i++) {
+		if (count[i]) {
+			double thisgap = low[i] - left;
+			if (thisgap > tmp)tmp = thisgap;
+			left = high[i];
+		}
+	}
+	delete count;
+	delete low;
+	delete high;
+	return tmp;
+}
+
+
+//换列
+void Algorithms1::tran_col(int p[iMaxSize1][iMaxSize1], int i,int j,int iRow) {
+	for (int k = 0; k < iRow; k++) {
+		/*如果是自己和自己交换时，就会变成0！！！
+		p[k][j] = p[k][j] + p[k][i];
+		p[k][i] = p[k][j] - p[k][i];
+		p[k][j] = p[k][j] - p[k][i];*/
+		int temp = p[k][j];
+		p[k][j] = p[k][i];
+		p[k][i] = temp;
+	}
+	if(i!=j)
+		iCount++;
+}
+//反转一行
+void Algorithms1::tran_row(int p[iMaxSize1][iMaxSize1], const int line, int iCol) {
+	for (int i = 0; i < iCol; i++)
+		p[line][i] = p[line][i] ^ 1;
+	iCount++;
+}
+//赋值,p2的值赋予p1
+void Algorithms1::copy(int p1[iMaxSize1][iMaxSize1], int p2[iMaxSize1][iMaxSize1],int iRow,int iCol) {
+	for (int i = 0; i < iRow; ++i) {
+		for (int j = 0; j < iCol; ++j)
+			p1[i][j] = p2[i][j];
+	}
+}
+//判断两个数组是否相同
+bool Algorithms1::isSame(int p1[iMaxSize1][iMaxSize1], int p2[iMaxSize1][iMaxSize1], int iRow, int iCol) {
+	for (int i = 0; i < iRow; ++i) {
+		for (int j = 0; j < iCol; ++j)
+			if(p1[i][j] != p2[i][j])
+				return false;
+	}
+	return true;
+}
+//判断两个数组的某一列是否相同
+bool Algorithms1::isSameCol(int p1[iMaxSize1][iMaxSize1], int i, int p2[iMaxSize1][iMaxSize1], int j, int iRow) {
+	for (int k = 0; k < iRow; ++k) {
+		if (p1[k][i] != p2[k][j])
+			return false;
+	}
+	return true;
+}
+int Algorithms1::transf(int p1[iMaxSize1][iMaxSize1],int p2[iMaxSize1][iMaxSize1],int iRow,int iCol){
+	int iMin = 0;
+	int iBest = iCol + iRow + 1;
+	int p3[iMaxSize1][iMaxSize1] = {};
+	//保持现场
+	copy(p3,p1,iRow,iCol);
+	bool bSameCol = false;
+	for (int i = 0; i < iCol; ++i) {
+		copy(p1, p3, iRow, iCol);
+		iCount = 0;
+		tran_col(p1,0,i,iRow);
+		//始终以第一列为准
+		for (int j = 0; j < iRow; ++j) {
+			if (p1[j][0] != p2[j][0])
+				tran_row(p1, j, iCol);
+		}
+		
+		//必须要从0开始，防止只有一列
+		for (int j = 0; j < iCol; ++j) {
+			bSameCol = false;
+			for (int k = j; k < iCol; ++k) {
+				//如果同一列相同就不用动，不同才互换。因为类似001111与101110，如果0与最后的1想换才一次，但是和前面几个要好多次反复
+				if (isSameCol(p1, k, p2, j, iRow)) {
+					if (k != j && isSameCol(p1, k, p2, k, iRow))
+						continue;
+					bSameCol = true;
+					tran_col(p1, j, k, iRow);
+					break;
+				}
+			}
+			if (!bSameCol)
+				break;
+		}
+		if (bSameCol&&iMin > iCount)
+			iMin = iCount;
+	}
+	if (iMin == iRow + iCol + 1)
+		return -1;
+	else
+		return iMin;
+}

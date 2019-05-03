@@ -27,7 +27,10 @@ private:
 	long prim[MAXP];
 	long int max, numb, PCOUNT;//max存放最多约束个数，numb存放约数个数最多的数
 	void search(long from, long tot, long num, long low, long up);
-
+	const int iMaxSize = 200015;
+	static const int iMaxSize1 = 150;
+	//次数
+	int iCount = 0;
 public:
 	Algorithms1();
 	//一本书的页码从白然数1开始顺序编码直到白然数，i。书的页码按照通常的习惯编排，
@@ -50,6 +53,23 @@ public:
 	int getMaxDiv(const int iFrom, const int iTo);
 	//void dfs(int point, int cnt1, long long now, long long num, int a, int b);
 
+	//最大间隙问题：给定 n 个实数X_1,X_2,X_3,X_4,X_5,X_6,X_n 
+	//求这 n 个数在实轴上相邻 2 个数之间的最大差值。假设对任何实数的下取整函数耗时O(1) ，设计解最大间隙问题的线性时间算法。
+	double maxgap(int n, double *x);
+	//有mXn(m<=100,n<=100)个金币在桌面上排成一个m行n列的金币阵列。每一枚金 币或正面朝上或背面朝上。用数字表示金币状态，
+	//0 表示金币正面朝上，1 表示背面朝上。 金币阵列游戏的规则是： （1）每次可将任一行金币翻过来放在原来的位置上； .
+	//（2）每次可任选 2 列，交换这 2 列金币的位置。 
+	int transf(int p1[iMaxSize1][iMaxSize1], int p2[iMaxSize1][iMaxSize1], int iRow, int iCol);
+	//换列
+	void tran_col(int p[iMaxSize1][iMaxSize1], int i, int j, int iRow);
+	//反转一行
+	void tran_row(int p[iMaxSize1][iMaxSize1], const int line, int iCol);
+	//赋值,p2的值赋予p1
+	void copy(int p1[iMaxSize1][iMaxSize1], int p2[iMaxSize1][iMaxSize1], int iRow, int iCol);
+	//判断两个数组是否相同
+	bool isSame(int p1[iMaxSize1][iMaxSize1], int p2[iMaxSize1][iMaxSize1], int iRow, int iCol);
+	//判断两个数组的某一列是否相同
+	bool isSameCol(int p1[iMaxSize1][iMaxSize1], int i, int p2[iMaxSize1][iMaxSize1], int j, int iRow);
 	~Algorithms1();
 };
 

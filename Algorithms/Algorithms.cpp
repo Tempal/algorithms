@@ -8,124 +8,91 @@
 #include "Algorithms1.h"
 using namespace std;
 
-const int iMaxSize = 150;
-//次数
-int iCount = 0;
-//换列
-void tran_col(int p[iMaxSize][iMaxSize], int i,int j,int iRow) {
-	for (int k = 0; k < iRow; k++) {
-		/*如果是自己和自己交换时，就会变成0！！！
-		p[k][j] = p[k][j] + p[k][i];
-		p[k][i] = p[k][j] - p[k][i];
-		p[k][j] = p[k][j] - p[k][i];*/
-		int temp = p[k][j];
-		p[k][j] = p[k][i];
-		p[k][i] = temp;
-	}
-	if(i!=j)
-		iCount++;
-}
-//反转一行
-void tran_row(int p[iMaxSize][iMaxSize], const int line, int iCol) {
-	for (int i = 0; i < iCol; i++)
-		p[line][i] = p[line][i] ^ 1;
-	iCount++;
-}
-//赋值,p2的值赋予p1
-void copy(int p1[iMaxSize][iMaxSize], int p2[iMaxSize][iMaxSize],int iRow,int iCol) {
-	for (int i = 0; i < iRow; ++i) {
-		for (int j = 0; j < iCol; ++j)
-			p1[i][j] = p2[i][j];
-	}
-}
-//判断两个数组是否相同
-bool isSame(int p1[iMaxSize][iMaxSize], int p2[iMaxSize][iMaxSize], int iRow, int iCol) {
-	for (int i = 0; i < iRow; ++i) {
-		for (int j = 0; j < iCol; ++j)
-			if(p1[i][j] != p2[i][j])
-				return false;
-	}
-	return true;
-}
-//判断两个数组的某一列是否相同
-bool isSameCol(int p1[iMaxSize][iMaxSize], int i, int p2[iMaxSize][iMaxSize], int j, int iRow) {
-	for (int k = 0; k < iRow; ++k) {
-		if (p1[k][i] != p2[k][j])
-			return false;
-	}
-	return true;
-}
 
+
+const int iMaxSize = 200015;
 int main()
 {
-	string s = "D:\\workspace\\VS2017\\solutions\\ch1\\prog14\\test\\";
-	string s1 = "D:\\workspace\\VS2017\\solutions\\ch1\\prog14\\temp\\";
+	string s = "D:\\workspace\\VS2017\\solutions\\ch1\\prog15\\test\\";
+	string s1 = "D:\\workspace\\VS2017\\solutions\\ch1\\prog15\\temp\\";
 	Algorithms1 ag;
-	for (char i = 1; i < 6; ++i) {
-		string sOut = s1 +"tranOut" +to_string(i);
-		string sIn = s + "tran"+to_string(i) +"\.in" ;
+	for (char i = 0; i < 7; ++i) {
+		string sOut = s1 +"gapOut" +to_string(i);
+		string sIn = s + "gap"+to_string(i) +"\.in" ;
 		ifstream fInput(sIn);
 		ofstream oFile(sOut);
 		int iValue = 0;
 		char pS[100];
 		fInput.getline(pS, 100);
 		int iTime = atoi(pS);
-		while (iTime > 0) {
-			int p1[iMaxSize][iMaxSize] = {}, p2[iMaxSize][iMaxSize] = {};
-			int iRow, iCol;
-			fInput >> iRow >> iCol;
-			int iMin = iRow + iCol+1;
-			for (int i = 0; i < iRow; ++i) {
-				for (int j = 0; j < iCol; ++j) {
-					fInput>>p1[i][j];
-				}
-			}
-			for (int i = 0; i < iRow; ++i) {
-				for (int j = 0; j < iCol; ++j) {
-					fInput >> p2[i][j];
-				}
-			}
-			int iBest = iCol + iRow + 1;
-			int p3[iMaxSize][iMaxSize] = {};
-			//保持现场
-			copy(p3,p1,iRow,iCol);
-			bool bSameCol = false;
-			for (int i = 0; i < iCol; ++i) {
-				copy(p1, p3, iRow, iCol);
-				iCount = 0;
-				tran_col(p1,0,i,iRow);
-				//始终以第一列为准
-				for (int j = 0; j < iRow; ++j) {
-					if (p1[j][0] != p2[j][0])
-						tran_row(p1, j, iCol);
-				}
-				
-				//必须要从0开始，防止只有一列
-				for (int j = 0; j < iCol; ++j) {
-					bSameCol = false;
-					for (int k = j; k < iCol; ++k) {
-						//如果同一列相同就不用动，不同才互换。因为类似001111与101110，如果0与最后的1想换才一次，但是和前面几个要好多次反复
-						if (isSameCol(p1, k, p2, j, iRow)) {
-							if (k != j && isSameCol(p1, k, p2, k, iRow))
-								continue;
-							bSameCol = true;
-							tran_col(p1, j, k, iRow);
-							break;
-						}
-					}
-					if (!bSameCol)
-						break;
-				}
-				if (bSameCol&&iMin > iCount)
-					iMin = iCount;
-			}
-			if(iMin== iRow + iCol + 1)
-				oFile << -1 << endl;
-			else
-				oFile << iMin << endl;
-			--iTime;
-		}
+		double *dIn=new double[iMaxSize];
+		memset(dIn, 0, iMaxSize*sizeof(double));
+		for (int i = 1; i <= iTime; ++i)
+			fInput >> dIn[i];
+		double dMax= ag.maxgap(iTime, dIn);
+		delete dIn;
+		oFile << dMax;
+
+
+
+		//while (iTime > 0) {
+		//	int p1[iMaxSize][iMaxSize] = {}, p2[iMaxSize][iMaxSize] = {};
+		//	int iRow, iCol;
+		//	fInput >> iRow >> iCol;
+		//	int iMin = iRow + iCol+1;
+		//	for (int i = 0; i < iRow; ++i) {
+		//		for (int j = 0; j < iCol; ++j) {
+		//			fInput>>p1[i][j];
+		//		}
+		//	}
+		//	for (int i = 0; i < iRow; ++i) {
+		//		for (int j = 0; j < iCol; ++j) {
+		//			fInput >> p2[i][j];
+		//		}
+		//	}
+		//	int iBest = iCol + iRow + 1;
+		//	int p3[iMaxSize][iMaxSize] = {};
+		//	//保持现场
+		//	copy(p3,p1,iRow,iCol);
+		//	bool bSameCol = false;
+		//	for (int i = 0; i < iCol; ++i) {
+		//		copy(p1, p3, iRow, iCol);
+		//		iCount = 0;
+		//		tran_col(p1,0,i,iRow);
+		//		//始终以第一列为准
+		//		for (int j = 0; j < iRow; ++j) {
+		//			if (p1[j][0] != p2[j][0])
+		//				tran_row(p1, j, iCol);
+		//		}
+		//		
+		//		//必须要从0开始，防止只有一列
+		//		for (int j = 0; j < iCol; ++j) {
+		//			bSameCol = false;
+		//			for (int k = j; k < iCol; ++k) {
+		//				//如果同一列相同就不用动，不同才互换。因为类似001111与101110，如果0与最后的1想换才一次，但是和前面几个要好多次反复
+		//				if (isSameCol(p1, k, p2, j, iRow)) {
+		//					if (k != j && isSameCol(p1, k, p2, k, iRow))
+		//						continue;
+		//					bSameCol = true;
+		//					tran_col(p1, j, k, iRow);
+		//					break;
+		//				}
+		//			}
+		//			if (!bSameCol)
+		//				break;
+		//		}
+		//		if (bSameCol&&iMin > iCount)
+		//			iMin = iCount;
+		//	}
+		//	if(iMin== iRow + iCol + 1)
+		//		oFile << -1 << endl;
+		//	else
+		//		oFile << iMin << endl;
+		//	--iTime;
+		//}
 		
+
+
 		//while (!fInput.eof()) {
 			//string s1;
 			//fInput.getline(pS,100);
